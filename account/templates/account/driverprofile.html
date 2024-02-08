@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Profile</title>
+</head>
+
+<body>
+<div class='row'>
+    <div class ="col-3">
+        {% include "account/sidebar2.html" %}
+    </div>
+            
+    <div class="col-9 px-5 py-5">   
+        <div class="card">
+            <div class="card-header">
+                {{ user.username }}'s Profile
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Personal Information</h5>
+                <p class="card-text">
+                    <strong>Username:</strong> {{ user.username }}<br>
+                    <strong>First name:</strong> {{ user.first_name }}<br>
+                    <strong>Last name:</strong> {{ user.last_name }}<br>
+                    <strong>Email:</strong> {{ user.email }}<br>
+                    <strong>Phone:</strong> {{ user_profile.phone }}
+                </p>
+                <h5 class="card-title">Vehicle Information</h5>
+                <p class="card-text">
+                    <strong>Vehicle Model:</strong> {{ driver_profile.vehicle_model }}<br>
+                    <strong>License Number:</strong> {{ driver_profile.license_number }}<br>
+                    <strong>Capacity:</strong> {{ driver_profile.capacity  }}<br>
+                    <strong>Special Request:</strong> {{driver_profile.special_request_info}}</br>
+                </p>
+                <a href="{% url 'edit_driver_profile' %}" class="btn btn-primary">Edit Profile</a>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+</body>
+</html>

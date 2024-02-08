@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Dashboard</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class='row'>
+
+        <div class="col-md-3">
+            {% include "account/sidebar2.html" %}
+        </div>
+
+        <div class="col-md-9 my-3">
+            <div class="jumbotron">
+                <h1 class="display-4">Welcome, {{ user.username }} (Driver)!</h1>
+                <p class="lead">This is your driver dashboard.</p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="{% url 'search_open_rides_driver' %}" class="btn btn-outline-primary btn-lg btn-block">Search Open Rides!</a>
+                </div>
+            </div>
+
+            <!-- Ride Requests -->
+            {% if ride_requests %}
+                <h3 class="mt-4">Your Current Ride:</h3>
+                <div class="list-group mt-3">
+                    {% for ride_request in ride_requests %}
+                        <div class="list-group-item list-group-item-action flex-column align-items-start">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ ride_request.destination }}</h5>
+                                <small>{{ ride_request.arrival_time }}</small>
+                            </div>
+                            <form method="get" action="{% url 'driver_ride_status' ride_request.id %}">
+                                <button type="submit" class="btn btn-outline-success mt-2">View Ride</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="mt-4">No confirmed rides found.</p>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+<!-- Include Bootstrap JS and its dependencies -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

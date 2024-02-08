@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Dashboard</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container-fluid ">
+    <div class="row">
+
+        <div class="col-md-3">
+            {% include "account/sidebar.html" %}
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 my-3">
+            <!-- Welcome Message -->
+            <div class="jumbotron">
+                <h1 class="display-4">Welcome, {{ user_profile.user.username }}!</h1>
+                <p class="lead">This is your personalized dashboard.</p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="{% url 'request_ride' %}" class="btn btn-outline-primary btn-lg btn-block">Start a Ride Now!</a>
+                </div>
+                <div class="col-md-6">
+                    <a href="{% url 'user_search_ride' %}" class="btn btn-outline-success secondary btn-lg btn-block">Search an Open Ride</a>
+                </div>
+            </div>
+
+            <!-- Ride Requests -->
+            {% if ride_requests %}
+                <h3 class="mt-4">Your Ride Requests:</h3>
+                <div class="list-group mt-3">
+                    {% for ride_request in ride_requests %}
+                        <div class="list-group-item list-group-item-action flex-column align-items-start">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ ride_request.destination }}</h5>
+                                <small>{{ ride_request.arrival_time }}</small>
+                            </div>
+                            <form method="get" action="{% url 'driver_ride_status' ride_request.id %}">
+                                <button type="submit" class="btn btn-outline-info mt-2">View Ride</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="mt-4">No ride requests currently.</p>
+            {% endif %} 
+        </div>
+    </div>
+</div>
+
+<!-- Include Bootstrap JS and its dependencies -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

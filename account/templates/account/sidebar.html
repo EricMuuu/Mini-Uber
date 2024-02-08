@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signin Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+    <!-- Custom CSS -->
+    <link href="/static/css/sidebar.css" rel="stylesheet">
+    <style>
+        .b-example-divider {
+            width: 100%;
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+          }
+        .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+        }
+    </style>
+</head>
+    
+<body>
+<main class="d-flex flex-nowrap">
+    <div class="d-flex flex-column  p-3 bg-body-tertiary" style="width: 280px;">
+        <div class="dropdown my-3 mb-3 mr-3">
+            <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+              <strong>{{user.username}}(User)</strong>
+            </a>
+            <ul class="dropdown-menu text-small shadow" style="">
+              <li>
+                <form method="post" action="{% url 'driver_dashboard' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-item" name="switch_mode">Switch Driver Mode</button>
+                </form>
+              </li>
+            
+              <li> 
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-item">Sign out</button>
+                </form>
+              </li> 
+            </ul>
+        </div>
+        <hr>
+         <div class="flex-shrink-0 p-3" style="width: 280px;">
+            {% comment %} <a href="/" class="d-flex align-items-center pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom">
+              <svg class="bi pe-none me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+              <span class="fs-3 fw-semibold">Account</span>
+            </a> {% endcomment %}
+            <ul class="list-unstyled ps-0">
+              <li class="mb-1">
+                <a href="{% url 'dashboard' %}" class="btn btn-toggle d-inline-flex align-items-center rounded border-0 link-body-emphasis text-decoration-none rounded">
+                    Home
+                </a>
+            </li>
+              <li class="mb-1">
+                <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" 
+                data-bs-target="#home-collapse" aria-expanded="true">
+                  Ride
+                </button>
+                <div class="collapse show" id="home-collapse" style="">
+                  <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">       
+                    <li><a href="{% url 'request_ride' %}" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Request a Ride</a></li>
+                    <li><a href="{% url 'search_open_rides' %}" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Search Open Rides</a></li>
+                    <li><a href="{% url 'ride_list' %}" class="link-body-emphasis d-inline-flex text-decoration-none rounded">My Rides</a></li>
+                  </ul>
+                </div>
+              </li>
+              <li class="mb-1">
+                <a href="{% url 'userprofile'%}" class="btn btn-toggle d-inline-flex align-items-center rounded border-0 link-body-emphasis text-decoration-none rounded">
+                Profile
+                </a>
+            </li>
+         
+            </ul>
+        </div>
+    </div>
+
+    <div class="b-example-divider b-example-vr"></div>
+    
+</main>
+
+
+    <!-- jQuery first, then Bootstrap JS. -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+</body>
+</html>
+
