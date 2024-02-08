@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Search Rides</title>
+</head>
+<body>
+
+<div class="row">
+    <div class="col-3">
+        {% include "account/sidebar2.html" %}
+    </div> 
+        
+    <div class="col-9 px-5 py-5">
+        <h2>Available Rides for Driver</h2>
+        </br>    
+    {% if open_rides %}
+        {% for ride_request, total_passengers in open_rides %}
+            <p>Ride Request Found!</p>
+            <div class="card">
+                <h5 class="card-header"> {{ ride_request.destination }}</h5>
+                <div class="card-body">
+                    <p>Destination: {{ ride_request.destination }}</p>
+                    <p>Arrival Time: {{ ride_request.arrival_time }}</p>
+                    <p>Total Passengers: {{ total_passengers }}</p>
+                    <p>Can Share: {{ ride_request.can_share}}</p>
+                    <p>Vehicle Type: {{ ride_request.vehicle_type }}</p>
+                    <p>Special Request: {{ride_request.special_request_info}}</p>
+                    <form method="post" action="{% url 'claim_ride' ride_request.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">Claim Ride</button>
+                    </form>
+                </div>
+            </div>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>Sorry, there is no available rides right now.</p>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

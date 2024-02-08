@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Ride Request</title>
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-3">
+            {% include "account/sidebar.html" %}
+        </div> 
+        
+        <div class="col-9 px-5 py-5">
+            <form method="post" action="{% url 'edit_ride_request' ride_request.id %}">
+                {% csrf_token %}
+                <div class="card">
+                    <h5 class="card-header">Edit Ride Request</h5>
+                    <div class="card-body">
+                      {% if is_owner %}
+                        <div class="mb-3">
+                            {{ ride_form.destination.label_tag }}
+                            {{ ride_form.destination }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="arrival_time" class="col-form-label">Request Arrival Time:</label>
+                            <input type="datetime-local" id="arrival_time" name="arrival_time" 
+                                   value="{{ ride_request.arrival_time|date:'Y-m-d\TH:i' }}" 
+                                   min="{{ 'now'|date:'Y-m-d\TH:i' }}" 
+                                   max="2024-12-31T23:59" required>
+                        </div>
+                        <div class="mb-3">
+                            {{ ride_form.passenger_num.label_tag }}
+                            {{ ride_form.passenger_num }}
+                        </div>
+                        <div class="mb-3">
+                            {{ ride_form.vehicle_type.label_tag }}
+                            {{ ride_form.vehicle_type }}
+                        </div>
+                        <div class="mb-3">
+                            {{ ride_form.can_share.label_tag }}
+                            {{ ride_form.can_share }}
+                        </div>
+                        <div class="mb-3">
+                            {{ ride_form.special_request_info.label_tag }}
+                            {{ ride_form.special_request_info }}
+                        </div>
+                        {{ sharer_form.as_p }}
+                        
+                        <div class="alert alert-info" >
+                            The vehicle type include: 'Sedan', 'Hatchback', 'Luxury Sedan', 'Standard SUV', 'Large SUV', please enter the correct vehicle type if you want to modify it.
+                        </div></br>
+
+                        <div class="alert alert-info" >
+                            Please note that the maximum capacity in our drivers' vehicles is 6. 
+                            When editing your passenger number, please ensure not to exceed this capacity in total; otherwise, your ride request may not be shown to drivers.
+                        </div>
+                        
+                      {% endif %}
+
+                      {% if not is_owner %}
+                        {{ sharer_form.as_p }}
+                        <div class="alert alert-info" >
+                            Please note that the maximum capacity in our drivers' vehicles is 6. 
+                            When editing your passenger number, please ensure not to exceed this capacity in total; otherwise, your ride request may not be shown to drivers.
+                        </div>
+                      {% endif %}
+                        <button type="submit" class="btn btn-primary">Update Ride</button>
+                    
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

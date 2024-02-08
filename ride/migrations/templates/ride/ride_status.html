@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ride Status</title>
+</head>
+<body>
+<div class='row'>
+    <div class ="col-3">
+        {% include "account/sidebar.html" %}
+    </div>
+    
+    <div class="col-9 px-5 py-5">
+        <h2>Ride Status</h2>
+        <div class="card">
+            <h5 class="card-header"> {{ ride_request.destination }}</h5>
+            <div class="card-body">
+                <h4>Ride Information</h4>
+                <p>Destination: {{ ride_request.destination }}</p>
+                <p>Arrival Time: {{ ride_request.arrival_time }}</p>
+                <p>Total Passengers: {{ total_passengers }}</p>
+                <p>Vehicle Type: {{ ride_request.vehicle_type }}</p>
+                <p>Can Share: {{ ride_request.can_share }}</p>
+
+                {% if driver_profile %}
+                    <h4>Driver Information</h4>
+                    <p>Username: {{ driver_profile.user_profile.user.username }}</p>
+                    <p>First Name: {{ driver_profile.user_profile.user.first_name}}</p>
+                    <p>Last Name: {{ driver_profile.user_profile.user.last_name}}</p>
+                    <h4>Vehicle Information</h4>
+                    <p>Vehicle Model: {{ driver_profile.vehicle_model }}</p>
+                    <p>License Number: {{ driver_profile.license_number }}</p>
+                    <p>Meet Special Request: {{ride_request.special_request_info}}</p>
+                {% endif %}
+
+
+                <h4>Owner Information</h4>
+                <p>Username: {{ride_request.owner.user.username }}</p>
+                <p>Passenger Number: {{ owner_passengers }}</p>
+                
+
+                <!-- Conditionally display sharers information -->
+                {% if sharers_info %}
+                    <h4>Sharers Information</h4>
+                    {% for entry in sharers_info %}
+                        <p>Username: {{ entry.sharer.user.username }}</p>
+                        <p>Passenger Count: {{ entry.num_passengers }}</p>
+                    {% endfor %}
+                {% endif %}
+
+                {% if ride_request.status == "Open" %}
+                    <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-primary">Update Ride</a>
+                {% else %}
+                    <p class="alert alert-info">Your ride has been confirmed by driver and cannot be modified.</p>
+                    <button class="btn btn-primary" disabled>Update Ride</button>
+                {% endif %}
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

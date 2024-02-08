@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Ride Status</title>
+</head>
+<body>
+
+<div class='row'>
+    <div class ="col-3">
+        {% include "account/sidebar2.html" %}
+    </div>
+    
+    <div class="col-9 px-5 py-5">
+        <h2>Ride Status</h2>
+        <div class="card">
+            <h5 class="card-header"> {{ ride_request.destination }}</h5>
+            <div class="card-body">
+                <h4>Ride Information</h4>
+                <p>Destination: {{ ride_request.destination }}</p>
+                <p>Arrival Time: {{ ride_request.arrival_time }}</p>
+                <p>Total Passenger Number: {{ total_passengers }}</p>
+                <p>Vehicle Type: {{ ride_request.vehicle_type }}</p>
+                <p>Can Share: {{ ride_request.can_share }}</p>
+                <p>Special Request: {{ride_request.special_request_info}}</p></br>
+
+                <h4>Ride Owner Information</h4>
+                <p>Username: {{ owner_username }}</p>
+                <p>Passenger Number: {{ owner_num_passengers }}</p> </br>
+                
+                
+                {% if sharers_details %}
+                    <h4>Ride Sharer Information</h4>
+                        {% for sharer in sharers_details %}
+                            <p>Username: {{ sharer.username }}</p>
+                            <p>Passengers Number: {{ sharer.num_passengers }}</p>
+                        {% endfor %}
+                {% else %}
+                    <p>No sharers</p>
+                {% endif %}
+
+
+                {% if ride_request.status == 'Confirm' %}
+                    <form method="post" action="{% url 'complete_ride' ride_request.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">Mark as Complete</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

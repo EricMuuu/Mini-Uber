@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Current Ride List</title>
+</head>
+
+<body>
+<div class="row">
+    <div class="col-3">
+        {% include "account/sidebar.html" %}
+    </div> 
+
+    <div class="col-9 px-5 py-5">
+        <h2>Rides</h2>
+        </br>
+        {% for ride_request in owned_rides %}
+            {% if ride_request.status != "Complete" %}
+                <div class="card">
+                    <h5 class="card-header">
+                        {{ ride_request.destination }} (Owned Ride)
+                    </h5>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <ul class="list-group">
+                                <li class="list-group-item">Destination: {{ ride_request.destination }}</li>
+                                <li class="list-group-item">Arrival Time: {{ ride_request.arrival_time }}</li>
+                                <li class="list-group-item">Ride Status: {{ ride_request.status }}</li>
+                                
+                            </ul>
+                        </p>
+                        <a href="{% url 'ride_status' ride_request.id %}" class="btn btn-primary">Ride Details</a>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        {% for ride_request in shared_rides %}
+            {% if ride_request.status != "Complete" %}
+                <div class="card">
+                    <h5 class="card-header">{{ ride_request.destination }} (Shared Ride)</h5>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <ul class="list-group">
+                                <!-- List of ride details -->
+                                <li class="list-group-item">Destination: {{ ride_request.destination }}</li>
+                                <li class="list-group-item">Arrival Time: {{ ride_request.arrival_time }}</li>
+                                <li class="list-group-item">Ride Status: {{ ride_request.status }}</li>
+                            </ul>
+                        </p>
+                        <a href="{% url 'ride_status' ride_request.id %}" class="btn btn-primary">Ride Details</a>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+           
+    </div>
+</div>
+
+
+</body>
+</html>
+

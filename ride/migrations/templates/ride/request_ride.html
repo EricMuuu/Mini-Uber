@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ride Request</title>
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-3">
+            {% include "account/sidebar.html" %}
+        </div>
+
+        <div class="col-9 px-5 py-5">
+            <form method="post" action="{% url 'request_ride' %}">
+                {% csrf_token %}
+                <h2 class="my-3">Start a Ride</h2>
+
+                <!-- Fields from RideRequestForm -->
+                <div class="row mb-3">
+                    <label for="destination" class="col-sm-4 col-form-label">Destination:</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="destination" name="destination" placeholder="Enter Destination" required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="arrival_time" class="col-sm-4 col-form-label">Request Arrival Time:</label>
+                    <div class="col-sm-8">
+                        <input type="datetime-local" id="arrival_time" name="arrival_time" value=" " min=" " max="2024-12-31T23:59" required/>
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <label for="vehicle_type" class="col-sm-4 form-label">Vehicle Type:</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="vehicle_type" name="vehicle_type" required>
+                            <option value="">Select Vehicle Type</option>
+                            <option value="Sedan">Sedan</option>
+                            <option value="Hatchback">Hatchback</option>
+                            <option value="Luxury Sedan">Luxury Sedan</option>
+                            <option value="Standard SUV">Standard SUV</option>
+                            <option value="Large SUV">Large SUV</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <label for="passenger_num" class="col-sm-4 col-form-label">Number of Passengers:</label>
+                    <div class="col-sm-8">
+                        <input type="number" class="form-control" id="passenger_num" name="passenger_num" placeholder="Enter Number of Passengers" min="1" max="6" required>
+                    </div>
+                </div>
+
+                <!-- Special Request dropdown from RideRequestForm -->
+                <div class="row mb-3">
+                    <label for="special_request_info" class="col-sm-4 form-label">Special Request:</label>
+                    <div class="col-sm-8">
+                        <select class="form-select" id="special_request_info" name="special_request_info">
+                            <option value="" selected disabled>Select Special Request</option>
+                            {% for choice in ride_request_form.special_request_info.field.choices %}
+                            <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="can_share" name="can_share">
+                    <label class="form-check-label" for="share-data">I would like to share my ride</label>
+                </div>
+
+
+                <button class="btn btn-primary w-100 " type="submit">Submit Request</button>
+
+            </form>
+
+            <ul>
+                {% for ride_request in ride_requests %}
+                    <li>
+                        <strong>Destination:</strong> {{ ride_request.destination }}<br>
+                        <strong>Passengers:</strong> {{ ride_request.num_passengers }}<br>
+                    </li>
+                {% endfor %}
+            </ul>
+
+        </div>
+    </div>
+
+    <script>
+        // Get the current date and time
+        const currentDateTime = new Date();
+
+        // Format it as "YYYY-MM-DDTHH:mm" to set as the value
+        const formattedDateTime = `${currentDateTime.getFullYear()}-${String(currentDateTime.getMonth() + 1).padStart(2, '0')}-${String(currentDateTime.getDate()).padStart(2, '0')}T${String(currentDateTime.getHours()).padStart(2, '0')}:${String(currentDateTime.getMinutes()).padStart(2, '0')}`;
+
+        // Set the formatted current date and time as the value of the input
+        document.getElementById('meeting-time').value = formattedDateTime;
+        document.getElementById('meeting-time').min = formattedDateTime;
+    </script>
+
+</body>
+
+</html>

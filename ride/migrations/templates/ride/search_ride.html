@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Rides</title>
+</head>
+
+<body>
+<div class='row'>
+  <div class="col-3">
+    {% include "account/sidebar.html" %}
+  </div>
+
+  <div class="col-9 px-5 py-5">
+    <!-- Form for ride search -->
+    <form method="get" action="{% url 'user_search_ride' %}">
+        {% csrf_token %}
+        <h2 class="my-3">Search Open Ride</h2>
+
+        <div class="row mb-3">
+            <label for="destination" class="col-sm-4 col-form-label">Destination:</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="destination" name="destination" placeholder="Enter Destination" required>
+            </div>
+        </div>
+        
+        <div class="row mb-3">
+            <label for="earliest_arrival_time" class="col-sm-4 col-form-label">Earliest Arrival Time:</label> 
+            <div class="col-sm-8">
+                <input type="datetime-local" id="earliest_arrival_time" name="earliest_arrival_time" value=" " min=" " max="2024-12-31T23:59" required/>
+            </div>
+        </div> 
+        
+        <div class="row mb-3">
+            <label for="latest_arrival_time" class="col-sm-4 col-form-label">Latest Arrival Time:</label> 
+            <div class="col-sm-8">
+                <input type="datetime-local" id="latest_arrival_time" name="latest_arrival_time"  value=" " min=" " max="2024-12-31T23:59" required/>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="passengers" class="col-sm-4 form-label">Number of Passengers:</label>
+            <div class="col-sm-8">
+                <select class="form-select" id="passengers" name="passengers" required>
+                    <option value="">Choose...</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Hidden fields to store user-related information -->
+        <input type="hidden" id="user" name="user" value="{{ request.user.username }}">
+        <input type="hidden" id="user_id" name="user_id" value="{{ request.user.userprofile.id }}">
+        
+        <button class="btn btn-primary w-100 mb-5" type="submit">Search Rides</button>
+    </form>
+
+    {% if open_rides_with_passengers %}
+        <h3>Your Ride Requests:</h3>
+        <ul>
+            {% for item in open_rides_with_passengers %}
+            <li>
+                Destination: {{ item.ride_request.destination }} </br>
+                Arrival Time: {{ item.ride_request.arrival_time }}</br>
+                Vehicle type: {{ item.ride_request.vehicle_type}}</br>
+                Special Request: {{ item.ride_request.special_request_info}}</br>
+                Total Passengers: {{ item.total_passengers }}</br>
+    
+                <form method="post" action="{% url 'join_ride' item.ride_request.id %}">
+                    {% csrf_token %}
+                    <label for="passenger_num">Number of Passengers:</label>
+                    <input type="number" id="passenger_num" name="passenger_num" value="{{ request.GET.passengers }}" required> 
+                    <button type="submit">Join Ride</button>
+                </form>
+                </br>
+
+                <div class="alert alert-info" >
+                    Please note that the maximum capacity in our drivers' vehicles is 6. 
+                    When joining a ride, please add the current passenger number with yours and ensure not to exceed this capacity; otherwise, your order may not be shown to drivers.
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No ride requests found.</p>
+    {% endif %}
+
+
+    <ul>
+        {% for ride_request in ride_requests %}
+            <li>
+                <strong>Destination:</strong> {{ ride_request.destination }}<br>
+                <strong>Passengers:</strong> {{ ride_request.num_passengers }}<br>
+            </li>
+        {% endfor %}
+    </ul>
+    
+  </div>
+</body>
+</html>
+
